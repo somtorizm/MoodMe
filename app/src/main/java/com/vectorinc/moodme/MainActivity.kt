@@ -2,8 +2,10 @@ package com.vectorinc.moodme
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.media.CamcorderProfile
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
@@ -13,9 +15,12 @@ import androidx.core.view.isVisible
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.AugmentedFace
 import com.google.ar.core.TrackingState
+import com.google.ar.sceneform.ArSceneView
+import com.google.ar.sceneform.SceneView
 import com.google.ar.sceneform.rendering.Renderable
 import com.vectorinc.moodme.model.ViewModel
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private var videoRecorder = VideoRecording()
     var isRecording: Boolean? = false
     var recording_txt: TextView? = null
+    var sceneView: SceneView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,35 +50,32 @@ class MainActivity : AppCompatActivity() {
         recording_txt?.isVisible = false
 
 
-
-        val sceneView = arFragment.arSceneView
-        sceneView.cameraStreamRenderPriority = Renderable.RENDER_PRIORITY_FIRST
-        val scene = sceneView.scene
-        videoRecorder.setSceneView(arFragment.getArSceneView());
-        val orientationx = resources.configuration.orientation
-        videoRecorder.setVideoQuality(CamcorderProfile.QUALITY_2160P, orientationx)
-
+        sceneView = arFragment.arSceneView
+        (sceneView as ArSceneView?)?.cameraStreamRenderPriority = Renderable.RENDER_PRIORITY_FIRST
+        val scene = (sceneView as ArSceneView?)?.scene
 
         // Specify the AR scene view to be recorded.
-
         // Specify the AR scene view to be recorded.
         videoRecorder.setSceneView(arFragment.arSceneView)
-
         // Set video quality and recording orientation to match that of the device.
-
         // Set video quality and recording orientation to match that of the device.
         val orientation = resources.configuration.orientation
-        videoRecorder.setVideoQuality(CamcorderProfile.QUALITY_2160P, orientation)
+        videoRecorder.setVideoQuality(CamcorderProfile.QUALITY_720P, orientation)
+        videoRecorder.videoBaseName = "AR"
 
 
         record_btn.setOnClickListener {
             if (isRecording == false) {
                 startRecording()
+                it.setBackgroundDrawable(null)
             } else {
                 stopRecoridng()
+                it.setBackgroundDrawable(getDrawable(R.drawable.shape_record))
+
             }
-
-
+        }
+        move_to_media.setOnClickListener {
+            startActivity(Intent(this, MediaFiles::class.java))
         }
         mustache.setOnClickListener {
             model.selectButton()
@@ -83,8 +86,8 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        scene.addOnUpdateListener {
-            sceneView.session
+        scene?.addOnUpdateListener {
+            (sceneView as ArSceneView?)?.session
                 ?.getAllTrackables(AugmentedFace::class.java)?.let {
                     for (f in it) {
                         if (!faceNodeMap.containsKey(f)) {
@@ -161,7 +164,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        sceneView?.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sceneView?.resume()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        sceneView?.destroy()
     }
 }

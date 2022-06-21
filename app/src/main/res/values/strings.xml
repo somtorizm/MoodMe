@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MoodMe</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Video_List">Videos</string>
 </resources>

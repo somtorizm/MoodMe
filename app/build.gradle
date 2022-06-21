@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.ar.sceneform.plugin'
     id 'kotlin-android-extensions'
+    id 'androidx.navigation.safeargs.kotlin'
+
 
 
 }
@@ -42,9 +44,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "com.google.ar.sceneform.ux:sceneform-ux:1.17.1"
-
-    // ARCore (Google Play Services for AR) library.
-    implementation 'com.google.ar:core:1.31.0'
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     //ViewModel
 
@@ -66,11 +67,3 @@ dependencies {
 }
 
 
-sceneform.asset('sampledata/sunglasses.fbx',
-        'default',
-        'sampledata/sunglasses.sfa',
-        'src/main/assets/sunglasses')
-sceneform.asset('sampledata/yellow_sunglasses.fbx',
-        'default',
-        'sampledata/yellow_sunglasses.sfa',
-        'src/main/assets/yellow_sunglasses')

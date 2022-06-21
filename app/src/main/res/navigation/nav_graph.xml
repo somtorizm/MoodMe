@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/videoItems">
+
+    <fragment
+        android:id="@+id/videoItems"
+        android:name="com.vectorinc.moodme.VideoItems"
+        android:label="@string/Video_List"
+        tools:layout="@layout/fragment_video_items">
+        <action
+            android:id="@+id/action_videoItems_to_playbackFragment"
+            app:destination="@id/playbackFragment">
+            <argument
+                android:name="name"
+                app:argType="string" />
+
+        </action>
+
+    </fragment>
+    <fragment
+        android:id="@+id/playbackFragment"
+        android:name="com.vectorinc.moodme.PlaybackFragment"
+        android:label="fragment_playback"
+        tools:layout="@layout/fragment_playback" />
+</navigation>

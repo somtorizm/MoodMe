@@ -32,7 +32,7 @@ class VideoRecording {
    private SceneView sceneView;
    private int videoCodec;
    private File videoDirectory;
-   private String videoBaseName;
+   public String videoBaseName;
    private File videoPath;
    private int bitRate = DEFAULT_BITRATE;
    private int frameRate = DEFAULT_FRAMERATE;
@@ -107,7 +107,7 @@ class VideoRecording {
          videoDirectory =
                  new File(
                          Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                                 + "/Sceneform");
+                                 + "/MoodMe");
       }
       if (videoBaseName == null || videoBaseName.isEmpty()) {
          videoBaseName = "Sample";
