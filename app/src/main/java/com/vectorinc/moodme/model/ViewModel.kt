@@ -3,10 +3,12 @@ package com.vectorinc.moodme.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.ar.core.Session
 
 class ViewModel : ViewModel() {
     private val _name = MutableLiveData<Int>()
     val name: LiveData<Int> = _name
+
 
     fun selectButton(){
         _name.value = 0
