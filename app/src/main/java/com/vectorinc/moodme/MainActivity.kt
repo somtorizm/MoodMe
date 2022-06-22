@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (!checkIsSupportedDeviceOrFinish()) {
+            finish()
             return
         }
         if (!checkPermission()){
@@ -82,11 +83,11 @@ class MainActivity : AppCompatActivity() {
         record_btn.setOnClickListener {
             if (isRecording == false) {
                 startRecording()
-                it.setBackgroundDrawable(getDrawable(R.drawable.ic_baseline_fiber_manual_record_24))
+                it.setBackgroundResource((R.drawable.ic_baseline_fiber_manual_record_24))
             } else {
                 stopRecoridng()
                 showDialog()
-                it.setBackgroundDrawable(getDrawable(R.drawable.shape_record))
+                it.setBackgroundResource(R.drawable.shape_record)
 
             }
         }
@@ -218,17 +219,19 @@ class MainActivity : AppCompatActivity() {
         sceneView?.destroy()
     }
     fun showDialog(){
-        val builder = AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this,R.style.DialogeTheme)
 
         val view = layoutInflater.inflate(R.layout.custom_dialog,null)
         builder.setPositiveButton("Save",
-                DialogInterface.OnClickListener { dialog, id ->
-                    videoRecorder.saveImage(view.record_txt_naming.text.trim().toString())
-                })
+            { dialog, id ->
+                videoRecorder.saveImage(view.record_txt_naming.text.trim().toString())
+                Toast.makeText(this,"Video saved to " + videoRecorder.videoPath.toString(),Toast.LENGTH_SHORT).show()
+            })
             .setNegativeButton("Cancel",
-                DialogInterface.OnClickListener { dialog, id ->
+                { dialog, id ->
                     videoRecorder.dontSaveVideo()
-                }).setMessage("Save Image")
+                }).setMessage("Save Video")
+
             .setView(view)
 
         // Create the AlertDialog object and return it

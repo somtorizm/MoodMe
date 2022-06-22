@@ -9,10 +9,11 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:padding="10dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
         android:id="@+id/record_txt_naming"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        android:hint="Enter video name"
         android:layout_height="wrap_content">
 
 

@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.MoodMe" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimary">@color/yellow_status_bar</item>
         <item name="colorPrimaryVariant">@color/yellow_status_bar</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
@@ -19,9 +19,13 @@
     <style name="MyActionBar" parent="Widget.MaterialComponents.ActionBar.Solid">
         <item name="background">@color/yellow</item>
     </style>
+    <style name="DialogeTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/dark_theme_surface_color</item>
+        <item name="colorAccent">@color/yellow_status_bar</item>
+    </style>
 
     <style name="ThemeOverlay.MoodMe.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/light_blue_900</item>
+        <item name="fullscreenBackgroundColor">@color/yellow_status_bar</item>
         <item name="fullscreenTextColor">@color/light_blue_A400</item>
     </style>
 </resources>
