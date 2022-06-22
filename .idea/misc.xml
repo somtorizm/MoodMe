@@ -4,9 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/drawable/shape.xml" value="0.109" />
+        <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/drawable/shape_folder.xml" value="0.1525" />
         <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/drawable/shape_record.xml" value="0.109" />
         <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/drawable/timer_background.xml" value="0.1135" />
-        <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/layout/activity_intro.xml" value="0.22447916666666667" />
+        <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/layout/activity_media_files.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/layout/custom_dialog.xml" value="0.25" />
         <entry key="..\:/Users/USER/Desktop/Android/app/src/main/res/layout/element.xml" value="0.2234375" />

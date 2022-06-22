@@ -2,4 +2,7 @@
     <string name="app_name">MoodMe</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Video_List">Moodme Videos</string>
+    <string name="title_activity_intro">IntroActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

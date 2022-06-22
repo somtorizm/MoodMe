@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         record_btn.setOnClickListener {
             if (isRecording == false) {
                 startRecording()
-                it.setBackgroundDrawable(null)
+                it.setBackgroundDrawable(getDrawable(R.drawable.ic_baseline_fiber_manual_record_24))
             } else {
                 stopRecoridng()
                 showDialog()
@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity() {
         val view = layoutInflater.inflate(R.layout.custom_dialog,null)
         builder.setPositiveButton("Save",
                 DialogInterface.OnClickListener { dialog, id ->
-                    videoRecorder.saveImage(view.record_txt_naming.text.toString())
+                    videoRecorder.saveImage(view.record_txt_naming.text.trim().toString())
                 })
             .setNegativeButton("Cancel",
                 DialogInterface.OnClickListener { dialog, id ->

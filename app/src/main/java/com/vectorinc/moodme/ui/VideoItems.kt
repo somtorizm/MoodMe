@@ -37,7 +37,7 @@ class VideoItems : Fragment() {
         val view =  inflater.inflate(R.layout.fragment_video_items, container, false)
         val courseAdapter = VideoAdapterprivate(pathList,view.context)
 
-        view.recycler_view?.layoutManager = GridLayoutManager(activity?.applicationContext,3,LinearLayoutManager.VERTICAL,false)
+        view.recycler_view?.layoutManager = GridLayoutManager(activity?.applicationContext,4,LinearLayoutManager.VERTICAL,false)
         view.recycler_view.adapter =  courseAdapter
 
         view.recycler_view.setHasFixedSize(true)

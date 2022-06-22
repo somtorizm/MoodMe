@@ -22,6 +22,9 @@
                 app:argType="string" />
 
         </action>
+        <action
+            android:id="@+id/action_videoItems_to_mainActivity"
+            app:destination="@id/mainActivity" />
 
     </fragment>
     <fragment
@@ -29,4 +32,9 @@
         android:label="{video_name}"
         android:name="com.vectorinc.moodme.ui.PlaybackFragment"
         tools:layout="@layout/fragment_playback" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.vectorinc.moodme.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>
