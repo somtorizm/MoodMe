@@ -1,4 +1,4 @@
-package com.vectorinc.moodme.adapter
+package com.vectorinc.moodme.model
 
 data class VideoModel(
     var videoName : String? = null,

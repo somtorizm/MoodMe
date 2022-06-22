@@ -1,4 +1,4 @@
-package com.vectorinc.moodme
+package com.vectorinc.moodme.ui
 
 import android.net.Uri
 import android.os.Bundle

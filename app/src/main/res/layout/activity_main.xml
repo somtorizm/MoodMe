@@ -6,7 +6,7 @@
     tools:context=".MainActivity">
 
 
-    <fragment android:name="com.vectorinc.moodme.FaceArFragment"
+    <fragment android:name="com.vectorinc.moodme.ui.FaceArFragment"
         android:id="@+id/face_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

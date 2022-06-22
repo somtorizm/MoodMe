@@ -2,17 +2,9 @@ package com.vectorinc.moodme
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.vectorinc.moodme.R
-import com.vectorinc.moodme.adapter.Adapter
-import com.vectorinc.moodme.adapter.VideoModel
-import kotlinx.android.synthetic.main.activity_media_files.*
-import java.io.File
 
 class MediaFiles : AppCompatActivity() {
     private lateinit var navController: NavController

@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VideoItems">
+    tools:context=".ui.VideoItems">
 
-    <GridView
-        android:id="@+id/grid_layout"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:horizontalSpacing="0dp"
-        android:numColumns="3"
-        android:verticalSpacing="0dp" />
+        />
 
 </FrameLayout>

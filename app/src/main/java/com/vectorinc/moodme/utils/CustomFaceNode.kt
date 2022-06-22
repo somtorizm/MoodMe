@@ -1,11 +1,7 @@
-package com.vectorinc.moodme
+package com.vectorinc.moodme.utils
 
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.ImageView
-import androidx.lifecycle.LiveData
-import com.google.android.filament.Filament.init
 import com.google.ar.core.AugmentedFace
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.Node
@@ -13,8 +9,8 @@ import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.AugmentedFaceNode
+import com.vectorinc.moodme.R
 import com.vectorinc.moodme.model.ViewModel
-import kotlin.math.absoluteValue
 
 class CustomFaceNode (augmentedFace: AugmentedFace?, val context: Context, val viewModel: ViewModel):  AugmentedFaceNode(augmentedFace) {
     private var eyeNodeLeft: Node? = null
@@ -47,7 +43,7 @@ class CustomFaceNode (augmentedFace: AugmentedFace?, val context: Context, val v
         mustacheNode?.setParent(this)
 
 
-      var list =  mutableListOf(R.drawable.moustache,R.drawable.mustache_1)
+      val list =  mutableListOf(R.drawable.moustache, R.drawable.mustache_1)
 
         viewModel.name.observeForever {
 

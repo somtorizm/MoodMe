@@ -7,14 +7,18 @@
 
     <fragment
         android:id="@+id/videoItems"
-        android:name="com.vectorinc.moodme.VideoItems"
+        android:name="com.vectorinc.moodme.ui.VideoItems"
         android:label="@string/Video_List"
         tools:layout="@layout/fragment_video_items">
+
         <action
             android:id="@+id/action_videoItems_to_playbackFragment"
             app:destination="@id/playbackFragment">
             <argument
                 android:name="name"
+                app:argType="string" />
+            <argument
+                android:name="video_name"
                 app:argType="string" />
 
         </action>
@@ -22,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/playbackFragment"
-        android:name="com.vectorinc.moodme.PlaybackFragment"
-        android:label="fragment_playback"
+        android:label="{video_name}"
+        android:name="com.vectorinc.moodme.ui.PlaybackFragment"
         tools:layout="@layout/fragment_playback" />
 </navigation>

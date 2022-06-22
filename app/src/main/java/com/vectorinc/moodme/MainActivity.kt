@@ -19,6 +19,8 @@ import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.SceneView
 import com.google.ar.sceneform.rendering.Renderable
 import com.vectorinc.moodme.model.ViewModel
+import com.vectorinc.moodme.ui.FaceArFragment
+import com.vectorinc.moodme.utils.CustomFaceNode
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 
@@ -157,8 +159,7 @@ class MainActivity : AppCompatActivity() {
             isRecording = false
             Log.d("Record status", "Recording stopped")
             recording_txt?.isVisible = false
-
-
+            
         }
 
 
