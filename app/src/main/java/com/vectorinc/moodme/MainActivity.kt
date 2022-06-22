@@ -1,16 +1,27 @@
 package com.vectorinc.moodme
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.ActivityManager
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.CamcorderProfile
+import android.net.Uri
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.AugmentedFace
@@ -22,7 +33,7 @@ import com.vectorinc.moodme.model.ViewModel
 import com.vectorinc.moodme.ui.FaceArFragment
 import com.vectorinc.moodme.utils.CustomFaceNode
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File
+import kotlinx.android.synthetic.main.custom_dialog.view.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,6 +55,9 @@ class MainActivity : AppCompatActivity() {
         if (!checkIsSupportedDeviceOrFinish()) {
             return
         }
+        if (!checkPermission()){
+            requestPermission()
+        }
 
         setContentView(R.layout.activity_main)
         val model: ViewModel by viewModels()
@@ -63,7 +77,6 @@ class MainActivity : AppCompatActivity() {
         // Set video quality and recording orientation to match that of the device.
         val orientation = resources.configuration.orientation
         videoRecorder.setVideoQuality(CamcorderProfile.QUALITY_720P, orientation)
-        videoRecorder.videoBaseName = "AR"
 
 
         record_btn.setOnClickListener {
@@ -72,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                 it.setBackgroundDrawable(null)
             } else {
                 stopRecoridng()
+                showDialog()
                 it.setBackgroundDrawable(getDrawable(R.drawable.shape_record))
 
             }
@@ -86,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         mustache1.setOnClickListener {
             model.selectButton1()
         }
+
 
 
         scene?.addOnUpdateListener {
@@ -137,9 +152,32 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         }
+
         return true
     }
 
+    private fun requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(String.format("package:%s", applicationContext.packageName))
+                startActivityForResult(intent, 2296)
+            } catch (e: Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivityForResult(intent, 2296)
+            }
+        } else {
+            //below android 11
+            val PERMISSION_REQUEST_CODE = 786
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(WRITE_EXTERNAL_STORAGE),
+                PERMISSION_REQUEST_CODE
+            )
+        }
+    }
     fun startRecording() {
         if (isRecording == false) {
             var record = videoRecorder.onToggleRecord()
@@ -178,5 +216,33 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         sceneView?.destroy()
+    }
+    fun showDialog(){
+        val builder = AlertDialog.Builder(this)
+
+        val view = layoutInflater.inflate(R.layout.custom_dialog,null)
+        builder.setPositiveButton("Save",
+                DialogInterface.OnClickListener { dialog, id ->
+                    videoRecorder.saveImage(view.record_txt_naming.text.toString())
+                })
+            .setNegativeButton("Cancel",
+                DialogInterface.OnClickListener { dialog, id ->
+                    videoRecorder.dontSaveVideo()
+                }).setMessage("Save Image")
+            .setView(view)
+
+        // Create the AlertDialog object and return it
+        builder.create().show()
+    }
+    private fun checkPermission(): Boolean {
+        return if (SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            val result =
+                ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE)
+            val result1 =
+                ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)
+            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
     }
 }

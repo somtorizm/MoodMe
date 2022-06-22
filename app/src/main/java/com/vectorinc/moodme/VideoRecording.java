@@ -114,7 +114,7 @@ class VideoRecording {
       }
       videoPath =
               new File(
-                      videoDirectory, videoBaseName + Long.toHexString(System.currentTimeMillis()) + ".mp4");
+                      videoDirectory, videoBaseName  + ".mp4");
       File dir = videoPath.getParentFile();
       if (!dir.exists()) {
          dir.mkdirs();
@@ -132,6 +132,7 @@ class VideoRecording {
       // Stop recording
       mediaRecorder.stop();
       mediaRecorder.reset();
+
    }
 
    private void setUpMediaRecorder() throws IOException {
@@ -184,6 +185,16 @@ class VideoRecording {
 
    public void setVideoCodec(int videoCodec) {
       this.videoCodec = videoCodec;
+   }
+
+   void saveImage(String name){
+      File from = new File(videoDirectory,"Sample.mp4");
+      File to = new File(videoDirectory,name + ".mp4");
+      from.renameTo(to);
+   }
+
+   void dontSaveVideo(){
+      videoPath.delete();
    }
 
    public boolean isRecording() {
