@@ -39,7 +39,5 @@ class FaceArFragment : ArFragment() {
         return  frameLayout
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
+
 }

@@ -114,18 +114,13 @@ class VideoRecording {
       if (videoBaseName == null || videoBaseName.isEmpty()) {
          videoBaseName = "Sample";
       }
-      new Thread(new Runnable() {
-         @Override
-         public void run() {
-            videoPath = new File(
-                    videoDirectory, videoBaseName  + ".mp4");
-            File dir = videoPath.getParentFile();
-            if (!dir.exists()) {
-               dir.mkdirs();
-            }
-         }
-      }).start();
-
+      videoPath =
+              new File(
+                      videoDirectory, videoBaseName  + ".mp4");
+      File dir = videoPath.getParentFile();
+      if (!dir.exists()) {
+         dir.mkdirs();
+      }
    }
 
    private void stopRecordingVideo() {
@@ -195,15 +190,9 @@ class VideoRecording {
    }
 
    void saveImage(String name){
-     new Thread(new Runnable() {
-        @Override
-        public void run() {
-           File from = new File(videoDirectory,"Sample.mp4");
-           File to = new File(videoDirectory,name + ".mp4");
-           from.renameTo(to);
-        }
-     }).start();
-
+      File from = new File(videoDirectory,"Sample.mp4");
+      File to = new File(videoDirectory,name + ".mp4");
+      from.renameTo(to);
    }
 
    void dontSaveVideo(){

@@ -1,6 +1,6 @@
 package com.vectorinc.moodme
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.ActivityManager
 import android.app.AlertDialog
@@ -12,7 +12,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import android.widget.TextView
@@ -20,7 +19,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.AugmentedFace
@@ -36,8 +34,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+
+private const val LOG_TAG = "AudioRecordTest"
+private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -52,6 +53,8 @@ class MainActivity : AppCompatActivity() {
     var recording_txt: TextView? = null
     var sceneView: SceneView? = null
     var scene: Scene? = null
+    val PERMISSION_REQUEST_CODE = 47
+
     val model: ViewModel by viewModels()
 
 
@@ -64,18 +67,16 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
-        if (!checkPermission()) {
-            requestPermission()
-        }
         arFragment = face_fragment as FaceArFragment
-        val scope = CoroutineScope(Dispatchers.IO)
+        sceneView = arFragment?.arSceneView
+ val scope = CoroutineScope(Dispatchers.IO)
 
         scope.launch {
-            sceneView = arFragment?.arSceneView
             (sceneView as ArSceneView?)?.cameraStreamRenderPriority =
                 Renderable.RENDER_PRIORITY_FIRST
-            scene = (sceneView as ArSceneView?)?.scene
         }
+        scene = (sceneView as ArSceneView?)?.scene
+
         videoRecorder.setSceneView(arFragment?.arSceneView)
         val orientation = resources.configuration.orientation
         // Set video quality and recording orientation to match that of the device.
@@ -138,7 +139,9 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+
     }
+
 
     private fun checkIsSupportedDeviceOrFinish(): Boolean {
         if (ArCoreApk.getInstance()
@@ -217,10 +220,7 @@ class MainActivity : AppCompatActivity() {
         sceneView?.pause()
     }
 
-    override fun onResume() {
-        super.onResume()
-        sceneView?.resume()
-    }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -236,7 +236,7 @@ class MainActivity : AppCompatActivity() {
             videoRecorder.saveImage(view.record_txt_naming.text.trim().toString())
             Toast.makeText(
                 this,
-                "Video saved to " + videoRecorder.videoPath.toString(),
+                "Video saved to " + videoRecorder.videoPath.parentFile.path +"/" + view.record_txt_naming.text.toString() + ".mp4",
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -252,17 +252,9 @@ class MainActivity : AppCompatActivity() {
         builder.create().show()
     }
 
-    private fun checkPermission(): Boolean {
-        return if (SDK_INT >= Build.VERSION_CODES.R) {
-            Environment.isExternalStorageManager()
-        } else {
-            val result =
-                ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE)
-            val result1 =
-                ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE)
-            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
-        }
-    }
+
+
+
 
 
 }
