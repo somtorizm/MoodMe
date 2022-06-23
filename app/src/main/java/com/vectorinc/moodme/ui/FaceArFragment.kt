@@ -41,6 +41,5 @@ class FaceArFragment : ArFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        sessions?.close()
     }
 }

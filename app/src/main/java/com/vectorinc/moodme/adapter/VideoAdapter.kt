@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.vectorinc.moodme.model.VideoModel
+import com.vectorinc.moodme.ui.VideoItems
 import com.vectorinc.moodme.ui.VideoItemsDirections
 import kotlinx.android.synthetic.main.grid_layout.view.*
 
@@ -26,13 +28,15 @@ class VideoAdapterprivate(val items: List<VideoModel>, val context: Context) :
             imageView.setOnClickListener{
                 val action = VideoItemsDirections.actionVideoItemsToPlaybackFragment(image_path,items.videoName.toString())
                 itemView.findNavController().navigate(action)
+            }
+            imageView.setOnLongClickListener {
 
-
-
+                true
             }
             loadImage(image_path,imageView)
 
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,7 +46,10 @@ class VideoAdapterprivate(val items: List<VideoModel>, val context: Context) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items?.get(position)!!)
+
     }
+
+
 
     override fun getItemCount(): Int {
         return items?.size!!
@@ -54,4 +61,6 @@ class VideoAdapterprivate(val items: List<VideoModel>, val context: Context) :
            .centerCrop()
            .into(imageView.image_thumbnail);
    }
+
+
 }

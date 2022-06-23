@@ -11,6 +11,8 @@ import com.google.ar.sceneform.SceneView;
 import java.io.File;
 import java.io.IOException;
 
+import kotlinx.coroutines.Dispatchers;
+
 /**
  * Video Recorder class handles recording the contents of a SceneView. It uses MediaRecorder to
  * encode the video. The quality settings can be set explicitly or simply use the CamcorderProfile
@@ -112,13 +114,18 @@ class VideoRecording {
       if (videoBaseName == null || videoBaseName.isEmpty()) {
          videoBaseName = "Sample";
       }
-      videoPath =
-              new File(
-                      videoDirectory, videoBaseName  + ".mp4");
-      File dir = videoPath.getParentFile();
-      if (!dir.exists()) {
-         dir.mkdirs();
-      }
+      new Thread(new Runnable() {
+         @Override
+         public void run() {
+            videoPath = new File(
+                    videoDirectory, videoBaseName  + ".mp4");
+            File dir = videoPath.getParentFile();
+            if (!dir.exists()) {
+               dir.mkdirs();
+            }
+         }
+      }).start();
+
    }
 
    private void stopRecordingVideo() {
@@ -188,9 +195,15 @@ class VideoRecording {
    }
 
    void saveImage(String name){
-      File from = new File(videoDirectory,"Sample.mp4");
-      File to = new File(videoDirectory,name + ".mp4");
-      from.renameTo(to);
+     new Thread(new Runnable() {
+        @Override
+        public void run() {
+           File from = new File(videoDirectory,"Sample.mp4");
+           File to = new File(videoDirectory,name + ".mp4");
+           from.renameTo(to);
+        }
+     }).start();
+
    }
 
    void dontSaveVideo(){

@@ -15,6 +15,7 @@ class ViewModel : ViewModel() {
 
     fun selectButton(){
         _name.value = 0
+
     }
     fun selectButton1(){
         _name.value = 1

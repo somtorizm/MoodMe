@@ -10,8 +10,8 @@
 
         <ImageView
             android:id="@+id/image_thumbnail"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:scaleType="centerCrop"
             android:layout_gravity="center"
             android:layout_margin="5dp"

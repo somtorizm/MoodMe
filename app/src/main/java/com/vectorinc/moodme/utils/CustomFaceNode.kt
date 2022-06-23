@@ -1,6 +1,7 @@
 package com.vectorinc.moodme.utils
 
 import android.content.Context
+import android.util.Log
 import android.widget.ImageView
 import com.google.ar.core.AugmentedFace
 import com.google.ar.sceneform.FrameTime
@@ -46,6 +47,8 @@ class CustomFaceNode (augmentedFace: AugmentedFace?, val context: Context, val v
       val list =  mutableListOf(R.drawable.moustache, R.drawable.mustache_1)
 
         viewModel.name.observeForever {
+
+
 
 
             ViewRenderable.builder()

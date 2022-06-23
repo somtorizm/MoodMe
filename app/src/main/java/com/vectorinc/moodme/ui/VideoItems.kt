@@ -2,10 +2,8 @@ package com.vectorinc.moodme.ui
 
 import android.os.Bundle
 import android.os.Environment
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +32,7 @@ class VideoItems : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+
         val view =  inflater.inflate(R.layout.fragment_video_items, container, false)
         val courseAdapter = VideoAdapterprivate(pathList,view.context)
 
@@ -41,14 +40,16 @@ class VideoItems : Fragment() {
         view.recycler_view.adapter =  courseAdapter
 
         view.recycler_view.setHasFixedSize(true)
-
          return  view
     }
+
+
 
     override fun onResume() {
         super.onResume()
 
     }
+
 
     fun getListofFiles(){
         var dirx = File(
@@ -61,6 +62,9 @@ class VideoItems : Fragment() {
             pathList.add(index,videoModel)
         }
     }
+
+
+
 
 
 }

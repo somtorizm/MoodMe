@@ -5,7 +5,6 @@ import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.ActivityManager
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.CamcorderProfile
@@ -27,6 +26,7 @@ import com.google.ar.core.ArCoreApk
 import com.google.ar.core.AugmentedFace
 import com.google.ar.core.TrackingState
 import com.google.ar.sceneform.ArSceneView
+import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.SceneView
 import com.google.ar.sceneform.rendering.Renderable
 import com.vectorinc.moodme.model.ViewModel
@@ -34,51 +34,60 @@ import com.vectorinc.moodme.ui.FaceArFragment
 import com.vectorinc.moodme.utils.CustomFaceNode
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_dialog.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        const val MIN_OPENGL_VERSION = 3.0
+        const val MIN_OPENGL_VERSION = 1.0
     }
 
-    lateinit var arFragment: FaceArFragment
+    var arFragment: FaceArFragment? = null
     var faceNodeMap = HashMap<AugmentedFace, CustomFaceNode>()
     private var videoRecorder = VideoRecording()
     var isRecording: Boolean? = false
     var recording_txt: TextView? = null
     var sceneView: SceneView? = null
+    var scene: Scene? = null
+    val model: ViewModel by viewModels()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         if (!checkIsSupportedDeviceOrFinish()) {
             finish()
             return
         }
-        if (!checkPermission()){
+        if (!checkPermission()) {
             requestPermission()
         }
-
-        setContentView(R.layout.activity_main)
-        val model: ViewModel by viewModels()
         arFragment = face_fragment as FaceArFragment
-        recording_txt = findViewById(R.id.recoridng_txt)
-        recording_txt?.isVisible = false
+        val scope = CoroutineScope(Dispatchers.IO)
 
-
-        sceneView = arFragment.arSceneView
-        (sceneView as ArSceneView?)?.cameraStreamRenderPriority = Renderable.RENDER_PRIORITY_FIRST
-        val scene = (sceneView as ArSceneView?)?.scene
-
-        // Specify the AR scene view to be recorded.
-        // Specify the AR scene view to be recorded.
-        videoRecorder.setSceneView(arFragment.arSceneView)
-        // Set video quality and recording orientation to match that of the device.
-        // Set video quality and recording orientation to match that of the device.
+        scope.launch {
+            sceneView = arFragment?.arSceneView
+            (sceneView as ArSceneView?)?.cameraStreamRenderPriority =
+                Renderable.RENDER_PRIORITY_FIRST
+            scene = (sceneView as ArSceneView?)?.scene
+        }
+        videoRecorder.setSceneView(arFragment?.arSceneView)
         val orientation = resources.configuration.orientation
+        // Set video quality and recording orientation to match that of the device.
         videoRecorder.setVideoQuality(CamcorderProfile.QUALITY_720P, orientation)
 
+
+        // Specify the AR scene view to be recorded.
+
+
+
+        recording_txt = findViewById(R.id.recoridng_txt)
+        recording_txt?.isVisible = false
 
         record_btn.setOnClickListener {
             if (isRecording == false) {
@@ -88,9 +97,10 @@ class MainActivity : AppCompatActivity() {
                 stopRecoridng()
                 showDialog()
                 it.setBackgroundResource(R.drawable.shape_record)
-
             }
         }
+
+
         move_to_media.setOnClickListener {
             startActivity(Intent(this, MediaFiles::class.java))
         }
@@ -101,9 +111,6 @@ class MainActivity : AppCompatActivity() {
         mustache1.setOnClickListener {
             model.selectButton1()
         }
-
-
-
         scene?.addOnUpdateListener {
             (sceneView as ArSceneView?)?.session
                 ?.getAllTrackables(AugmentedFace::class.java)?.let {
@@ -111,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                         if (!faceNodeMap.containsKey(f)) {
                             val faceNode = CustomFaceNode(f, this, model)
                             faceNode.setParent(scene)
-                            faceNodeMap.put(f, faceNode)
+                            faceNodeMap[f] = faceNode
                         }
                     }
                     // Remove any AugmentedFaceNodes associated with an AugmentedFace that stopped tracking.
@@ -171,7 +178,7 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             //below android 11
-            val PERMISSION_REQUEST_CODE = 786
+            val PERMISSION_REQUEST_CODE = 2296
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(WRITE_EXTERNAL_STORAGE),
@@ -179,6 +186,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
     }
+
     fun startRecording() {
         if (isRecording == false) {
             var record = videoRecorder.onToggleRecord()
@@ -198,7 +206,7 @@ class MainActivity : AppCompatActivity() {
             isRecording = false
             Log.d("Record status", "Recording stopped")
             recording_txt?.isVisible = false
-            
+
         }
 
 
@@ -218,25 +226,32 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         sceneView?.destroy()
     }
-    fun showDialog(){
-        val builder = AlertDialog.Builder(this,R.style.DialogeTheme)
 
-        val view = layoutInflater.inflate(R.layout.custom_dialog,null)
-        builder.setPositiveButton("Save",
-            { dialog, id ->
-                videoRecorder.saveImage(view.record_txt_naming.text.trim().toString())
-                Toast.makeText(this,"Video saved to " + videoRecorder.videoPath.toString(),Toast.LENGTH_SHORT).show()
-            })
-            .setNegativeButton("Cancel",
-                { dialog, id ->
-                    videoRecorder.dontSaveVideo()
-                }).setMessage("Save Video")
+    fun showDialog() {
+        val builder = AlertDialog.Builder(this, R.style.DialogeTheme)
+        val view = layoutInflater.inflate(R.layout.custom_dialog, null)
+        builder.setPositiveButton(
+            "Save"
+        ) { _, _ ->
+            videoRecorder.saveImage(view.record_txt_naming.text.trim().toString())
+            Toast.makeText(
+                this,
+                "Video saved to " + videoRecorder.videoPath.toString(),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+            .setNegativeButton(
+                "Cancel"
+            ) { _, _ ->
+                videoRecorder.dontSaveVideo()
+            }.setMessage("Save Video")
 
             .setView(view)
 
         // Create the AlertDialog object and return it
         builder.create().show()
     }
+
     private fun checkPermission(): Boolean {
         return if (SDK_INT >= Build.VERSION_CODES.R) {
             Environment.isExternalStorageManager()
@@ -248,4 +263,6 @@ class MainActivity : AppCompatActivity() {
             result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
         }
     }
+
+
 }
